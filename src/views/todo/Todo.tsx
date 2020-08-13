@@ -10,6 +10,7 @@ export interface Props {
 
 export interface State {
   txtVal: string, // 输入的文本
+  // todoList: Array<string>, // todo list
   todoList: Array<string>, // todo list
 }
 
@@ -24,15 +25,14 @@ export class Todo extends React.Component<Props, State> {
   }
 
   render() {
-    console.log('this.state', this.state)
     let { todoList, txtVal } = this.state
-    const listItem = todoList.map((todoItem: string) => <li>{todoItem}</li>)
+    const listItem = todoList.map((todoItem: string,index: number) => <li key={index}>{todoItem}</li>)
 
     return (
       <div className="todo-list">
         <main className="todo-list__wrapper">
-          <input type="text" onChange={this.handleChange} value={txtVal}/>
-          <button className="add-btn" onClick={this.handleClick}>建立备忘录</button>
+          <input type="text" onChange={this.handleChange.bind(this)} value={txtVal}/>
+          <button className="add-btn" onClick={this.handleClick.bind(this)}>建立备忘录</button>
           <ul className="todo-items">
             {listItem}
           </ul>
@@ -45,10 +45,16 @@ export class Todo extends React.Component<Props, State> {
   // }
 
   handleClick() {
-    // this.props.todoList.push(this.props.txtVal)
-    // this.setState([...this.state.todoList, ...this.state.txtVal])
+    this.setState({
+      // todoList: this.state.todoList.push(this.state.txtVal)
+      todoList: [...this.state.todoList, this.state.txtVal],
+      txtVal: ''
+    })
   }
-  handleChange() {
-    // this.setState(this.props.txtVal)
+  // handleChange(e: React.SyntheticEvent) {
+  handleChange(e: any) {
+    this.setState({
+      txtVal: e.target.value
+    })
   }
 }
